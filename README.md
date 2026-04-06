@@ -1,53 +1,152 @@
-# ECHO: Edge-Cloud Hybrid Omnichannel Architecture
+# Retail Operations Platform
 
-A research-grade, hackathon-winning backend system for distributed retail operations, pioneering event-sourced offline-first design with AI autonomy.
+A comprehensive omnichannel convenience retail operations platform with offline synchronization, AI-powered insights, and event-sourced architecture for 86 stores.
 
-## Abstract
-ECHO revolutionizes retail by integrating event-sourced edge computing with cloud-based AI, achieving 99.9% sync success through vector clocks and event replay. This architecture reduces operational downtime by 70% and delivers 85% forecast accuracy with safety guardrails.
+## Overview
 
-## Architecture Overview
-ECHO's edge-cloud hybrid design embeds intelligence at store level with append-only event logs for offline resilience. Key innovations:
-- **Event Sourcing**: Immutable event logs enable conflict-free sync via vector clocks.
-- **Offline-First**: Stores operate independently, replaying events during connectivity.
-- **AI Autonomy**: Hybrid forecasting with human-in-the-loop validation.
-- **Event-Driven**: Asynchronous communication via domain events (SALE_COMPLETED, STOCK_UPDATED, etc.).
+This platform provides a complete solution for retail operations including inventory management, billing, reporting, and AI-driven forecasting and anomaly detection. Built with a microservices architecture using FastAPI backend and React JS frontend, featuring event sourcing with vector clocks for robust offline sync.
 
-## Core Components
-- **Microservices**: Auth, Inventory, Billing, Replenishment, Reporting, AI.
-- **Event Log**: Append-only table for state transitions.
-- **Vector Clocks**: Causality-aware conflict resolution.
-- **Hybrid AI**: Moving average + seasonal trends + feedback loops.
+## Features
 
-## Setup
-1. Install Poetry: `curl -sSL https://install.python-poetry.org | python3 -`
-2. Install backend dependencies: `poetry install`
-3. Update `.env` with DB URL and secrets
-4. Run migrations: `alembic upgrade head`
-5. Seed the database: `python -m shared.seed`
-6. Run backend services:
-   - `uvicorn services.auth.main:app --reload --port 8001`
-   - `uvicorn services.inventory.main:app --reload --port 8002`
-   - `uvicorn services.billing.main:app --reload --port 8003`
-   - `uvicorn services.replenishment.main:app --reload --port 8004`
-   - `uvicorn services.reporting.main:app --reload --port 8005`
-   - `uvicorn services.ai.main:app --reload --port 8006`
+- **Authentication & Authorization**: JWT-based secure login system
+- **Inventory Management**: Real-time stock tracking and updates
+- **Billing & Transactions**: Seamless transaction processing
+- **Reporting & Analytics**: Comprehensive dashboards with charts
+- **AI-Powered Insights**: Conversational AI for sales forecasting and anomaly detection
+- **Offline Synchronization**: Event-sourced architecture with vector clocks for conflict resolution
+- **Responsive UI**: Modern React JS frontend with mobile-friendly design
 
-## Frontend Setup
-1. Open terminal and run:
+## Architecture
+
+### Backend (FastAPI Microservices)
+- **Auth Service** (Port 8001): User authentication and JWT token management
+- **Inventory Service** (Port 8002): Product and stock management
+- **Billing Service** (Port 8003): Transaction processing and payment handling
+- **Reporting Service** (Port 8004): Analytics and report generation
+- **AI Service** (Port 8005): Machine learning models for forecasting and NLP queries
+
+### Frontend (React JS)
+- Login page with JWT authentication
+- Inventory dashboard for CRUD operations
+- Billing interface for transaction creation
+- Reporting page with interactive charts
+- AI chat interface for querying insights
+
+### Data Layer
+- **Database**: SQLite for development (easily switchable to PostgreSQL)
+- **Event Store**: Append-only event logs for offline sync
+- **Caching**: Redis for performance optimization
+- **AI Models**: NumPy/Pandas for data processing, custom NLP for queries
+
+## Tech Stack
+
+- **Backend**: FastAPI, SQLAlchemy (async), Uvicorn, Pydantic
+- **Frontend**: React JS, Vite, Axios, React Router
+- **Database**: SQLite (with async support via aiosqlite)
+- **AI/ML**: NumPy, Pandas, Scikit-learn
+- **Authentication**: Python-JOSE, PassLib
+- **Caching**: Redis
+- **Other**: Alembic (migrations), Structlog (logging)
+
+## Setup Instructions
+
+### Prerequisites
+- Python 3.9+
+- Node.js 16+
+- Git
+
+### Backend Setup
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd retail-ops-platform
+   ```
+
+2. Install Python dependencies:
+   ```bash
+   pip install fastapi uvicorn[standard] sqlalchemy aiosqlite alembic python-jose[cryptography] passlib[bcrypt] redis pydantic httpx structlog prometheus-client numpy pandas scikit-learn
+   ```
+
+3. Set up environment variables:
+   - Copy `.env.example` to `.env` (if exists) or create `.env`
+   - Configure database URL, JWT secrets, etc.
+
+4. Run database migrations:
+   ```bash
+   alembic upgrade head
+   ```
+
+5. Start backend services (run each in separate terminals):
+   ```bash
+   # Auth Service
+   uvicorn services.auth.main:app --reload --port 8001
+
+   # Inventory Service
+   uvicorn services.inventory.main:app --reload --port 8002
+
+   # Billing Service
+   uvicorn services.billing.main:app --reload --port 8003
+
+   # Reporting Service
+   uvicorn services.reporting.main:app --reload --port 8004
+
+   # AI Service
+   uvicorn services.ai.main:app --reload --port 8005
+   ```
+
+### Frontend Setup
+1. Navigate to frontend directory:
    ```bash
    cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
    npm install
    ```
-2. Start the frontend app:
+
+3. Start development server:
    ```bash
    npm run dev
    ```
-3. Open the browser at the Vite URL (usually `http://localhost:4173`).
 
-## API Endpoints
-- Auth: `/auth/login`, `/auth/register`
-- Inventory: `/inventory/`, `/inventory/sync`
-- Billing: `/billing/`, `/billing/sync`
+4. Open browser at `http://localhost:5173` (or the URL shown in terminal)
+
+## API Documentation
+
+Once services are running, access API docs at:
+- Auth: http://localhost:8001/docs
+- Inventory: http://localhost:8002/docs
+- Billing: http://localhost:8003/docs
+- Reporting: http://localhost:8004/docs
+- AI: http://localhost:8005/docs
+
+## Usage
+
+1. **Login**: Use the frontend login page or API to authenticate
+2. **Inventory**: Add/edit products, track stock levels
+3. **Billing**: Create transactions and process payments
+4. **Reporting**: View analytics and generate reports
+5. **AI**: Ask questions like "forecast sales for next month" or "detect anomalies in inventory"
+
+## Development
+
+- Backend services are in `services/` directory
+- Shared code in `shared/` directory
+- Frontend code in `frontend/` directory
+- Database files in `database/` directory
+- Documentation in `docs/` directory
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make changes and test
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
 - AI: `/ai/forecast`, `/ai/query` (conversational)
 
 ## Key Features
