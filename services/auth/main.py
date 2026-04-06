@@ -1,0 +1,26 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from services.auth.routers import auth
+import structlog
+
+logger = structlog.get_logger()
+
+app = FastAPI(title="Authentication Service", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Auth service started")
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
